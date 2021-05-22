@@ -4,4 +4,4 @@
 
 - [ ] shade value 50
 - [ ] dropdown for scale factor (log, linear, pow, sqrt)
-- [ ] 2 or more constrains (currently there is only one color constrain)
+- [ ] 2 or more constraints (currently there is only one color constraint)

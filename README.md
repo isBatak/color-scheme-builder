@@ -3,7 +3,7 @@
 ## Todo
 
 - [x] shade value 50
-- [x] dropdown for scale factor (log, linear, pow, sqrt)
+- [ ] dropdown for scale factor (log, linear, pow, sqrt)
 - [x] 2 or more constraints (currently there is only one color constraint)
 
 

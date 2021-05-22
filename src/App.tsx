@@ -92,7 +92,7 @@ export default function App() {
               display: "flex",
               alignItems: "center",
               fontWeight: selectedScale === scales[index] ? "bold" : undefined,
-              zIndex: selectedScale === scales[index] ? "10" : undefined,
+              zIndex: selectedScale === scales[index] ? 10 : undefined,
               boxShadow:
                 selectedScale === scales[index]
                   ? "0px 0px 0px 5px white, 0px 0px 10px 5px rgba(0,0,0,0.5)"

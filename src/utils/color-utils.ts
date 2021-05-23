@@ -1,4 +1,12 @@
-export const generateColors = (definedColors: string[], scales: number[]) => {
+import * as d3 from "d3-scale";
+
+export const distributionFunctionTypes = ["linear", "log", "pow", "sqrt"];
+
+export const generateColors = (
+  definedColors: string[],
+  scales: number[],
+  functionType?: string
+) => {
   const colors = [...definedColors];
 
   for (let i = 0; i < colors.length; i++) {
@@ -10,7 +18,8 @@ export const generateColors = (definedColors: string[], scales: number[]) => {
         colors[i - 1],
         scales[j],
         colors[j],
-        scales[i]
+        scales[i],
+        functionType
       );
     }
   }
@@ -18,23 +27,33 @@ export const generateColors = (definedColors: string[], scales: number[]) => {
   return colors;
 };
 
-const getColor = (
-  scale1: number,
-  color1hex: string,
-  scale2: number,
-  color2hex: string,
-  scale: number
-) => {
-  const color1 = hexToRgb(color1hex);
-  const color2 = hexToRgb(color2hex);
-
-  const color = color1.map((c1, i) => {
-    const c2 = color2[i];
-    const percentage = (scale - scale1) / (scale2 - scale1);
-    return Math.round((c2 - c1) * percentage + c1);
-  });
-
+const getColor: GetColorFunction = (s1, c1, s2, c2, s, f = "linear") => {
+  const color1 = hexToRgb(c1);
+  const color2 = hexToRgb(c2);
+  const color = color1.map((c, i) => functions[f](s1, c, s2, color2[i], s));
   return rgbToHex(color);
+};
+
+const functions: Record<string, DistributionFunction> = {
+  linear: (s1, c1, s2, c2, s) => {
+    const percentage = (s - s1) / (s2 - s1);
+    return Math.round((c2 - c1) * percentage + c1);
+  },
+  log: (s1, c1, s2, c2, s) => {
+    let res = d3.scaleLog().domain([s1, s2]).range([c1, c2])(s);
+    if (Number.isNaN(res)) {
+      return functions.linear(s1, c1, s2, c2, s);
+    }
+    return Math.round(res);
+  },
+  pow: (s1, c1, s2, c2, s) => {
+    let res = d3.scalePow().domain([s1, s2]).range([c1, c2]).exponent(2)(s);
+    return Math.round(res);
+  },
+  sqrt: (s1, c1, s2, c2, s) => {
+    let res = d3.scaleSqrt().domain([s1, s2]).range([c1, c2])(s);
+    return Math.round(res);
+  },
 };
 
 const hexToRgb = (hex: string) => {
@@ -56,3 +75,19 @@ const rgbToHex = (rgb: number[]) => {
 
   return `#${hex.join("")}`;
 };
+
+type GetColorFunction = (
+  scale1: number,
+  color1hex: string,
+  scale2: number,
+  color2hex: string,
+  scale: number,
+  functionType?: string
+) => string;
+type DistributionFunction = (
+  scale1: number,
+  color1: number,
+  scale2: number,
+  color2: number,
+  scale: number
+) => number;

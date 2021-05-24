@@ -52,13 +52,16 @@ export const App = () => {
       return;
     }
 
-    const index = customScaleValues.indexOf(scale);
-    customScaleValues.splice(index, 1);
-    definedColors.splice(index, 1);
+    const customScaleIndex = customScaleValues.indexOf(scale);
+    const scaleIndex = scales.indexOf(scale);
+    customScaleValues.splice(customScaleIndex, 1);
+    definedColors.splice(scaleIndex, 1);
 
     setCustomScaleValues(customScaleValues);
     defineColors(definedColors);
-    updateColors(definedColors, customScaleValues);
+    
+    const newScale = sortNumbers(defaultScales.concat(customScaleValues));
+    updateColors(definedColors, newScale);
   };
 
   React.useEffect(() => {

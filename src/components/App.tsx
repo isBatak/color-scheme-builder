@@ -1,15 +1,17 @@
 import React, { useState } from "react";
-import { Input, Box, Container, Flex, Text } from "@chakra-ui/react";
+import { Input, Box, Container, Flex, Text, HStack, Select } from "@chakra-ui/react";
 import { defaultColors, defaultScales } from "../consts/defaultValues";
 import { CustomScaleInput } from "./CustomScaleInput";
 import { OutputColorsJson } from "./OutputColorsJson";
 import { ClearButton } from "./ClearButton";
-import { generateColors } from "../utils/color-utils";
+import { generateColors, distributionFunctionTypes } from "../utils/color-utils";
 import { sortNumbers } from "../utils/math-utils";
 
 export const App = () => {
   const [colors, setColors] = useState(defaultColors);
   const [definedColors, defineColors] = useState(defaultColors);
+
+  const [selectedFunction, selectFunction] = useState<string>('linear');
 
   const [customScaleValues, setCustomScaleValues] = useState<number[]>([]);
   const [customScaleValue, setCustomScaleValue] = useState<number>(550);
@@ -17,7 +19,7 @@ export const App = () => {
   const scales = sortNumbers(defaultScales.concat(customScaleValues));
 
   const updateColors = (_colors?: string[], _scales?: number[]) => {
-    setColors(generateColors(_colors || definedColors, _scales || scales));
+    setColors(generateColors(_colors || definedColors, _scales || scales, selectedFunction));
   };
 
   const defineColor = (scale: number, color: string) => {
@@ -66,13 +68,26 @@ export const App = () => {
 
   React.useEffect(() => {
     updateColors();
-  }, []);
+  }, [selectedFunction]);
 
   return (
     <div className="App">
-      <CustomScaleInput
-        {...{ addCustomScale, customScaleValue, setCustomScaleValue }}
-      />
+      <Flex justifyContent="center" p="4">
+        <HStack>
+          <Text>Distribution function:</Text>
+          <Select
+            w="100px"
+            value={selectedFunction}
+            onChange={(e) => selectFunction(e.target.value)}
+          >
+            {distributionFunctionTypes.map((type) => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            ))}
+          </Select>
+        </HStack>
+      </Flex>
 
       <Container>
         <Box borderColor="gray.200" borderRadius="md" p="4">
@@ -133,6 +148,10 @@ export const App = () => {
               </Flex>
             );
           })}
+
+          <CustomScaleInput
+            {...{ addCustomScale, customScaleValue, setCustomScaleValue }}
+          />
 
           <OutputColorsJson {...{ colors, scales }} />
         </Box>

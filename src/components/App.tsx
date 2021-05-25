@@ -6,6 +6,7 @@ import { OutputColorsJson } from "./OutputColorsJson";
 import { ClearButton } from "./ClearButton";
 import { generateColors, distributionFunctionTypes } from "../utils/color-utils";
 import { sortNumbers } from "../utils/math-utils";
+import { LockButton } from "./LockButton";
 
 export const App = () => {
   const [colors, setColors] = useState(defaultColors);
@@ -61,7 +62,7 @@ export const App = () => {
 
     setCustomScaleValues(customScaleValues);
     defineColors(definedColors);
-    
+
     const newScale = sortNumbers(defaultScales.concat(customScaleValues));
     updateColors(definedColors, newScale);
   };
@@ -140,7 +141,7 @@ export const App = () => {
                   onChange={(e) => defineColor(scale, e.target.value)}
                 />
 
-                <ClearButton
+                <LockButton
                   label="Clear defined color"
                   onClick={() => defineColor(scale, "")}
                   disabled={!isDefined}

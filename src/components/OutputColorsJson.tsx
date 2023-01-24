@@ -20,7 +20,7 @@ export const OutputColorsJson: FC<IOutputColorsJson> = ({ colors, scales }) => {
             (prev, current, index) =>
               `${prev}${index === 0 ? "{\n" : "\n"}\t${
                 scales[index + 1]
-              }: ${current.toUpperCase()},`,
+              }: "${current.toUpperCase()}",`,
             ""
           ) + "\n}"
       }

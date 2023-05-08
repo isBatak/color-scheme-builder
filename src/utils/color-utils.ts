@@ -91,3 +91,32 @@ type DistributionFunction = (
   color2: number,
   scale: number
 ) => number;
+
+export const getChakraUITokens = (
+  colors: string[],
+  scales: number[]
+): Record<string, string> =>
+  colors.slice(1, colors.length - 1).reduce((acc, color, i) => {
+    const scale = scales[i + 1];
+    return {
+      ...acc,
+      [scale]: color,
+    };
+  }, {});
+
+export const getChakraUITokensObjectString = (
+  colors: string[],
+  scales: number[]
+) => {
+  const tokens = getChakraUITokens(colors, scales);
+
+  return Object.keys(tokens)
+    .reduce(
+      (prev, current, index) =>
+        `${prev}${index === 0 ? "{\n" : "\n"}\t${current}: '${tokens[
+          current
+        ].toUpperCase()}',`,
+      ""
+    )
+    .concat("\n}");
+};

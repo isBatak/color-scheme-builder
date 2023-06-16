@@ -1,6 +1,7 @@
 import * as d3 from "d3-scale";
 
 export const distributionFunctionTypes = ["linear", "log", "pow", "sqrt"];
+export const outputSystemTypes = ["Chakra UI", "Panda.css"];
 
 export const generateColors = (
   definedColors: string[],
@@ -103,6 +104,17 @@ export const getChakraUITokens = (
       [scale]: color,
     };
   }, {});
+export const getPandaTokens = (
+  colors: string[],
+  scales: number[]
+): Record<string, string> =>
+  colors.slice(1, colors.length - 1).reduce((acc, color, i) => {
+    const scale = scales[i + 1];
+    return {
+      ...acc,
+      [scale]: { value: color.toUpperCase() },
+    };
+  }, {});
 
 export const getChakraUITokensObjectString = (
   colors: string[],
@@ -116,6 +128,23 @@ export const getChakraUITokensObjectString = (
         `${prev}${index === 0 ? "{\n" : "\n"}\t${current}: '${tokens[
           current
         ].toUpperCase()}',`,
+      ""
+    )
+    .concat("\n}");
+};
+
+export const getPandaCssTokensObjectString = (
+  colors: string[],
+  scales: number[]
+) => {
+  const tokens = getPandaTokens(colors, scales);
+  console.log("tokens:", tokens);
+  return Object.keys(tokens)
+    .reduce(
+      (prev, current, index) =>
+        `${prev}${index === 0 ? "{\n" : "\n"}\t${current}: ${JSON.stringify(
+          tokens[current]
+        )},`,
       ""
     )
     .concat("\n}");

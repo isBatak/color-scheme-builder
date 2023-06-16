@@ -1,10 +1,23 @@
 import React, { useState } from "react";
-import { Input, Box, Container, Flex, Text, HStack, Select } from "@chakra-ui/react";
+import {
+  Input,
+  Box,
+  Container,
+  Flex,
+  Text,
+  HStack,
+  Select,
+  VStack,
+} from "@chakra-ui/react";
 import { defaultColors, defaultScales } from "../consts/defaultValues";
 import { CustomScaleInput } from "./CustomScaleInput";
 import { OutputColorsJson } from "./OutputColorsJson";
 import { ClearButton } from "./ClearButton";
-import { generateColors, distributionFunctionTypes } from "../utils/color-utils";
+import {
+  generateColors,
+  distributionFunctionTypes,
+  outputSystemTypes,
+} from "../utils/color-utils";
 import { sortNumbers } from "../utils/math-utils";
 import { LockButton } from "./LockButton";
 
@@ -12,7 +25,8 @@ export const App = () => {
   const [colors, setColors] = useState(defaultColors);
   const [definedColors, defineColors] = useState(defaultColors);
 
-  const [selectedFunction, selectFunction] = useState<string>('linear');
+  const [selectedFunction, selectFunction] = useState<string>("linear");
+  const [selectedSystem, selectSystem] = useState<string>("Chakra UI");
 
   const [customScaleValues, setCustomScaleValues] = useState<number[]>([]);
   const [customScaleValue, setCustomScaleValue] = useState<number>(550);
@@ -20,7 +34,13 @@ export const App = () => {
   const scales = sortNumbers(defaultScales.concat(customScaleValues));
 
   const updateColors = (_colors?: string[], _scales?: number[]) => {
-    setColors(generateColors(_colors || definedColors, _scales || scales, selectedFunction));
+    setColors(
+      generateColors(
+        _colors || definedColors,
+        _scales || scales,
+        selectedFunction
+      )
+    );
   };
 
   const defineColor = (scale: number, color: string) => {
@@ -73,21 +93,37 @@ export const App = () => {
 
   return (
     <div className="App">
-      <Flex justifyContent="center" p="4">
-        <HStack>
-          <Text>Distribution function:</Text>
-          <Select
-            w="100px"
-            value={selectedFunction}
-            onChange={(e) => selectFunction(e.target.value)}
-          >
-            {distributionFunctionTypes.map((type) => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </Select>
-        </HStack>
+      <Flex py="4">
+        <Container>
+          <VStack w="full" alignItems="flex-start">
+            <HStack w="full">
+              <Text minW="200px">Distribution function:</Text>
+              <Select
+                value={selectedFunction}
+                onChange={(e) => selectFunction(e.target.value)}
+              >
+                {distributionFunctionTypes.map((type) => (
+                  <option key={type} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </Select>
+            </HStack>
+            <HStack w="full">
+              <Text minW="200px">Output system:</Text>
+              <Select
+                value={selectedSystem}
+                onChange={(e) => selectSystem(e.target.value)}
+              >
+                {outputSystemTypes.map((type) => (
+                  <option key={type} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </Select>
+            </HStack>
+          </VStack>
+        </Container>
       </Flex>
 
       <Container>
@@ -154,7 +190,7 @@ export const App = () => {
             {...{ addCustomScale, customScaleValue, setCustomScaleValue }}
           />
 
-          <OutputColorsJson {...{ colors, scales }} />
+          <OutputColorsJson {...{ colors, scales, system: selectedSystem }} />
         </Box>
       </Container>
     </div>

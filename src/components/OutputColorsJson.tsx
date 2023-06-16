@@ -1,18 +1,17 @@
-import { FC } from "react";
-import { Textarea } from "@chakra-ui/textarea";
-import { getChakraUITokensObjectString } from "../utils/color-utils";
 import { Box, Button, Code, useToast } from "@chakra-ui/react";
+import { FC } from "react";
+import { getChakraUITokensObjectString, getPandaCssTokensObjectString } from "../utils/color-utils";
 import { copyToClipboard } from "../utils/common-utils";
-import { ArrowLeftIcon } from "@chakra-ui/icons";
 
 interface IOutputColorsJson {
   colors: string[];
+  system: string;
   scales: number[];
 }
 
-export const OutputColorsJson: FC<IOutputColorsJson> = ({ colors, scales }) => {
+export const OutputColorsJson: FC<IOutputColorsJson> = ({ colors, scales, system }) => {
   const toast = useToast();
-  const tokenObjectString = getChakraUITokensObjectString(colors, scales);
+  const tokenObjectString = system === 'Chakra UI' ? getChakraUITokensObjectString(colors, scales) : getPandaCssTokensObjectString(colors, scales);
 
   const onTokenCopy = async () => {
     const isCopied = await copyToClipboard(tokenObjectString);

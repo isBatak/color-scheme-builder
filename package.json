@@ -12,8 +12,10 @@
     "@emotion/styled": "^11.11.0",
     "d3-scale": "^3.3.0",
     "framer-motion": "^10.16.16",
+    "lucide-react": "^0.302.0",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "wcag-color": "^1.1.1"
   },
   "devDependencies": {
     "@pandacss/dev": "^0.23.0",

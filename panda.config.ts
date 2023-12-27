@@ -22,11 +22,11 @@ export default defineConfig({
 
   jsxFramework: "react",
 
-  layers: {
-    utilities: "panda_utilities",
-    base: "panda_base",
-    recipes: "panda_recipes",
-    reset: "panda_reset",
-    tokens: "panda_tokens",
-  },
+  // layers: {
+  //   utilities: "panda_utilities",
+  //   base: "panda_base",
+  //   recipes: "panda_recipes",
+  //   reset: "panda_reset",
+  //   tokens: "panda_tokens",
+  // },
 });

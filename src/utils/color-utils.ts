@@ -76,6 +76,26 @@ const rgbToHex = (rgb: number[]) => {
   return `#${hex.join("")}`;
 };
 
+export const rgbaToRgb = (rgba: string) => {
+  const [r, g, b, a] = rgba
+    .replace("rgba(", "")
+    .replace(")", "")
+    .split(",")
+    .map((c) => parseInt(c));
+
+  return `rgb(${r}, ${g}, ${b})`;
+};
+
+export const rgbaToHex = (rgba: string) => {
+  const [r, g, b, a] = rgba
+    .replace("rgba(", "")
+    .replace(")", "")
+    .split(",")
+    .map((c) => parseInt(c));
+
+  return rgbToHex([r, g, b]);
+};
+
 type GetColorFunction = (
   scale1: number,
   color1hex: string,

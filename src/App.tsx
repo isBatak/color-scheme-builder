@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   Input,
-  Box,
   Container,
   Flex,
   Text,
@@ -13,9 +12,14 @@ import { defaultColors, defaultScales } from "./consts/defaultValues";
 import { CustomScaleInput } from "./components/CustomScaleInput";
 import { OutputColorsJson } from "./components/OutputColorsJson";
 import { ClearButton } from "./components/ClearButton";
-import { generateColors, distributionFunctionTypes } from "./utils/color-utils";
+import {
+  generateColors,
+  distributionFunctionTypes,
+  rgbaToHex,
+} from "./utils/color-utils";
 import { sortNumbers } from "./utils/math-utils";
 import { LockButton } from "./components/LockButton";
+import { Color } from "./components/Color";
 
 export const App = () => {
   const [colors, setColors] = useState(defaultColors);
@@ -109,7 +113,7 @@ export const App = () => {
       </Flex>
 
       <Container>
-        <Box borderColor="gray.200" borderRadius="md" p="4">
+        <VStack spacing={4} p="4">
           {scales.map((scale, i) => {
             if (i === 0 || i === scales.length - 1) return null;
 
@@ -128,16 +132,18 @@ export const App = () => {
                   disabled={!isCustom}
                 />
 
-                <Text
+                {/* <Text
                   w="80px"
                   textAlign="center"
                   textDecoration={isCustom ? "underline" : undefined}
                   fontWeight={isDefined ? "bold" : "normal"}
                 >
                   {scale}
-                </Text>
+                </Text> */}
 
-                <Input
+                {/* <Text>{colors[i]}</Text> */}
+
+                {/* <Input
                   type="text"
                   w="160px"
                   value={colors[i]}
@@ -148,16 +154,27 @@ export const App = () => {
                       defineColor(scale, e.target.value);
                     }
                   }}
+                /> */}
+                <Color
+                  name={scale.toString()}
+                  value={colors[i]}
+                  onChange={(value) => {
+                    defineColor(scale, rgbaToHex(value));
+                  }}
                 />
 
-                <Input
+                {/* <Input
                   type="color"
                   border="none"
-                  px="10px"
+                  shadow="md"
+                  p="0"
                   h="50px"
                   value={colors[i]}
-                  onChange={(e) => defineColor(scale, e.target.value)}
-                />
+                  onChange={(e) => {
+                    console.log(e.target.value);
+                    defineColor(scale, e.target.value);
+                  }}
+                /> */}
 
                 <LockButton
                   label="Clear defined color"
@@ -173,7 +190,7 @@ export const App = () => {
           />
 
           <OutputColorsJson {...{ colors, scales }} />
-        </Box>
+        </VStack>
       </Container>
     </div>
   );

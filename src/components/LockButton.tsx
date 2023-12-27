@@ -8,7 +8,11 @@ interface ILockButton {
   disabled: boolean;
 }
 
-export const LockButton: FC<React.PropsWithChildren<ILockButton>> = ({ label, onClick, disabled,  }) => {
+export const LockButton: FC<React.PropsWithChildren<ILockButton>> = ({
+  label,
+  onClick,
+  disabled,
+}) => {
   return (
     <IconButton
       aria-label={label}

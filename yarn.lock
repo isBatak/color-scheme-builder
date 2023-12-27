@@ -3614,6 +3614,11 @@ lru-cache@^5.1.1:
   dependencies:
     yallist "^3.0.2"
 
+lucide-react@^0.302.0:
+  version "0.302.0"
+  resolved "https://registry.yarnpkg.com/lucide-react/-/lucide-react-0.302.0.tgz#ba5d1f90d2348cf564991fb06966560ee2edc54b"
+  integrity sha512-JZX+1fjpqxvQmEgItvPOAwRlqf0Eg9dSZMxljA2/V2M6dluOhQCPBhewIlSJWgkNu0M36kViOgmTAMnDaAMOFw==
+
 magic-string@^0.30.2, magic-string@^0.30.5:
   version "0.30.5"
   resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.30.5.tgz#1994d980bd1c8835dc6e78db7cbd4ae4f24746f9"
@@ -4293,6 +4298,11 @@ vite@^5.0.10:
     rollup "^4.2.0"
   optionalDependencies:
     fsevents "~2.3.3"
+
+wcag-color@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/wcag-color/-/wcag-color-1.1.1.tgz#a11454ac39dbfec41fa03fd7af5465728e99255f"
+  integrity sha512-KRez+YYOx7AGoQ6+Izu3YjNsISYAC+F/g0hJ+eNaaA8taeLbEkptkgA46SM9ioXxz/2KTjJpQqAhOwAQVwaTEQ==
 
 which-pm@2.0.0:
   version "2.0.0"

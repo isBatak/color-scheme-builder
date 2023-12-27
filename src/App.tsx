@@ -9,24 +9,19 @@ import {
   Select,
   VStack,
 } from "@chakra-ui/react";
-import { defaultColors, defaultScales } from "../consts/defaultValues";
-import { CustomScaleInput } from "./CustomScaleInput";
-import { OutputColorsJson } from "./OutputColorsJson";
-import { ClearButton } from "./ClearButton";
-import {
-  generateColors,
-  distributionFunctionTypes,
-  outputSystemTypes,
-} from "../utils/color-utils";
-import { sortNumbers } from "../utils/math-utils";
-import { LockButton } from "./LockButton";
+import { defaultColors, defaultScales } from "./consts/defaultValues";
+import { CustomScaleInput } from "./components/CustomScaleInput";
+import { OutputColorsJson } from "./components/OutputColorsJson";
+import { ClearButton } from "./components/ClearButton";
+import { generateColors, distributionFunctionTypes } from "./utils/color-utils";
+import { sortNumbers } from "./utils/math-utils";
+import { LockButton } from "./components/LockButton";
 
 export const App = () => {
   const [colors, setColors] = useState(defaultColors);
   const [definedColors, defineColors] = useState(defaultColors);
 
   const [selectedFunction, selectFunction] = useState<string>("linear");
-  const [selectedSystem, selectSystem] = useState<string>("Chakra UI");
 
   const [customScaleValues, setCustomScaleValues] = useState<number[]>([]);
   const [customScaleValue, setCustomScaleValue] = useState<number>(550);
@@ -109,19 +104,6 @@ export const App = () => {
                 ))}
               </Select>
             </HStack>
-            <HStack w="full">
-              <Text minW="200px">Output system:</Text>
-              <Select
-                value={selectedSystem}
-                onChange={(e) => selectSystem(e.target.value)}
-              >
-                {outputSystemTypes.map((type) => (
-                  <option key={type} value={type}>
-                    {type}
-                  </option>
-                ))}
-              </Select>
-            </HStack>
           </VStack>
         </Container>
       </Flex>
@@ -190,7 +172,7 @@ export const App = () => {
             {...{ addCustomScale, customScaleValue, setCustomScaleValue }}
           />
 
-          <OutputColorsJson {...{ colors, scales, system: selectedSystem }} />
+          <OutputColorsJson {...{ colors, scales }} />
         </Box>
       </Container>
     </div>

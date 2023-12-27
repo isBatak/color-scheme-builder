@@ -22,3 +22,5 @@ yarn-error.log*
 # Vite related dependencies
 .vite
 .swc
+
+styled-system

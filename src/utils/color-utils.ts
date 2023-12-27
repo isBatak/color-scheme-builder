@@ -1,7 +1,6 @@
 import * as d3 from "d3-scale";
 
 export const distributionFunctionTypes = ["linear", "log", "pow", "sqrt"];
-export const outputSystemTypes = ["Chakra UI", "Panda.css"];
 
 export const generateColors = (
   definedColors: string[],
@@ -138,7 +137,7 @@ export const getPandaCssTokensObjectString = (
   scales: number[]
 ) => {
   const tokens = getPandaTokens(colors, scales);
-  console.log("tokens:", tokens);
+
   return Object.keys(tokens)
     .reduce(
       (prev, current, index) =>

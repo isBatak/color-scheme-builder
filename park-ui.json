@@ -1,0 +1,10 @@
+{
+  "cssFramework": "panda",
+  "jsFramework": "react",
+  "importAliases": {
+    "styled-system": "@/styled-system",
+    "components": "@/components/ui",
+    "lib": "@/lib"
+  },
+  "useReactServerComponents": false
+}

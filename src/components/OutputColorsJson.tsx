@@ -9,7 +9,7 @@ interface IOutputColorsJson {
   scales: number[];
 }
 
-export const OutputColorsJson: FC<IOutputColorsJson> = ({ colors, scales, system }) => {
+export const OutputColorsJson: FC<React.PropsWithChildren<IOutputColorsJson>> = ({ colors, scales, system }) => {
   const toast = useToast();
   const tokenObjectString = system === 'Chakra UI' ? getChakraUITokensObjectString(colors, scales) : getPandaCssTokensObjectString(colors, scales);
 

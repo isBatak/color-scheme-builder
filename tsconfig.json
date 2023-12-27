@@ -7,10 +7,12 @@
     "esModuleInterop": true,
     "lib": [
       "dom",
-      "es2015"
+      "es2015",
+      "dom.iterable",
+      "esnext"
     ],
     "jsx": "react-jsx",
-    "target": "es5",
+    "target": "ESNext",
     "allowJs": true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
@@ -20,6 +22,10 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true
+    "noEmit": true,
+    "types": [
+      "vite/client",
+      "vite-plugin-svgr/client"
+    ]
   }
 }

@@ -8,7 +8,7 @@ interface IClearButton {
   disabled: boolean;
 }
 
-export const ClearButton: FC<IClearButton> = ({ label, onClick, disabled,  }) => {
+export const ClearButton: FC<React.PropsWithChildren<IClearButton>> = ({ label, onClick, disabled,  }) => {
   return (
     <IconButton
       aria-label={label}

@@ -15,7 +15,7 @@ interface ICustomScaleInput {
   addCustomScale: Function;
 }
 
-export const CustomScaleInput: FC<ICustomScaleInput> = ({
+export const CustomScaleInput: FC<React.PropsWithChildren<ICustomScaleInput>> = ({
   customScaleValue,
   setCustomScaleValue,
   addCustomScale,

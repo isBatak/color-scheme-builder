@@ -13,11 +13,8 @@ const ColorButton = (props: any) => {
     <styled.button
       w="200px"
       h="100px"
-      border="1px solid"
-      borderColor="gray.9"
-      borderRadius="md"
       pos="relative"
-      p="2!"
+      p="2"
       display="flex"
       flexDir="column"
       gap="1"
@@ -79,7 +76,12 @@ export const Color = ({ value, onChange, name }: ColorProps) => {
                   background="#000000"
                 />
                 <Box pos="absolute" inset={0} zIndex={0}>
-                  <ColorPicker.Swatch value={api.value} w="100%" h="100%" />
+                  <ColorPicker.Swatch
+                    value={api.value}
+                    w="100%"
+                    h="100%"
+                    borderRadius="0"
+                  />
                 </Box>
               </ColorButton>
             </ColorPicker.Trigger>

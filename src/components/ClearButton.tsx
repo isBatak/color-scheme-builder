@@ -1,6 +1,6 @@
 import { FC, MouseEventHandler } from "react";
-import { CloseIcon } from "@chakra-ui/icons";
-import { IconButton } from "@chakra-ui/button";
+import { IconButton } from "./ui/icon-button";
+import { XIcon } from "lucide-react";
 
 interface IClearButton {
   label: string;
@@ -8,14 +8,14 @@ interface IClearButton {
   disabled: boolean;
 }
 
-export const ClearButton: FC<React.PropsWithChildren<IClearButton>> = ({ label, onClick, disabled,  }) => {
+export const ClearButton: FC<React.PropsWithChildren<IClearButton>> = ({
+  label,
+  onClick,
+  disabled,
+}) => {
   return (
-    <IconButton
-      aria-label={label}
-      icon={<CloseIcon />}
-      variant="unstyled"
-      onClick={onClick}
-      disabled={disabled}
-    />
+    <IconButton aria-label={label} onClick={onClick} disabled={disabled}>
+      <XIcon />
+    </IconButton>
   );
 };

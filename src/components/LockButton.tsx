@@ -1,6 +1,6 @@
-import { FC, MouseEventHandler } from "react";
-import { LockIcon } from "@chakra-ui/icons";
-import { IconButton } from "@chakra-ui/button";
+import { MouseEventHandler, PropsWithChildren } from "react";
+import { IconButton } from "./ui/icon-button";
+import { LockIcon } from "lucide-react";
 
 interface ILockButton {
   label: string;
@@ -8,18 +8,14 @@ interface ILockButton {
   disabled: boolean;
 }
 
-export const LockButton: FC<React.PropsWithChildren<ILockButton>> = ({
+export const LockButton = ({
   label,
   onClick,
   disabled,
-}) => {
+}: PropsWithChildren<ILockButton>) => {
   return (
-    <IconButton
-      aria-label={label}
-      icon={<LockIcon />}
-      variant="unstyled"
-      onClick={onClick}
-      disabled={disabled}
-    />
+    <IconButton aria-label={label} onClick={onClick} disabled={disabled}>
+      <LockIcon />
+    </IconButton>
   );
 };

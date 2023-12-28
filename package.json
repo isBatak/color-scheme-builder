@@ -6,12 +6,8 @@
   "main": "src/index.tsx",
   "dependencies": {
     "@ark-ui/react": "^1.2.1",
-    "@chakra-ui/icons": "^2.1.1",
-    "@chakra-ui/react": "^2.8.2",
-    "@emotion/react": "^11.11.3",
-    "@emotion/styled": "^11.11.0",
     "d3-scale": "^3.3.0",
-    "framer-motion": "^10.16.16",
+    "jotai": "^2.6.0",
     "lucide-react": "^0.302.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",

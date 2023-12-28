@@ -1,7 +1,5 @@
 import * as d3 from "d3-scale";
 
-export const distributionFunctionTypes = ["linear", "log", "pow", "sqrt"];
-
 export const generateColors = (
   definedColors: string[],
   scales: number[],
@@ -31,6 +29,7 @@ const getColor: GetColorFunction = (s1, c1, s2, c2, s, f = "linear") => {
   const color1 = hexToRgb(c1);
   const color2 = hexToRgb(c2);
   const color = color1.map((c, i) => functions[f](s1, c, s2, color2[i], s));
+
   return rgbToHex(color);
 };
 

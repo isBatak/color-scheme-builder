@@ -26,6 +26,8 @@
       "@/components/ui/*": ["src/components/ui/*"],
       "@/lib/*": ["src/lib/*"],
       "@/styled-system/*": ["styled-system/*"],
+      "@/consts/*": ["src/consts/*"],
+      "@/utils/*": ["src/utils/*"],
     },
     "types": [
       "vite/client",

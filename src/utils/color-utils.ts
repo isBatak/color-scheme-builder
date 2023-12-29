@@ -1,37 +1,33 @@
+import { endColor, startColor } from "@/consts/defaultValues";
+import { Color, parseColor } from "@zag-js/color-utils";
 import * as d3 from "d3-scale";
 
-export const distributionFunctionTypes = ["linear", "log", "pow", "sqrt"];
+export const generatePalette = (scales: number[], functionType?: string) => {
+  const palette: Array<Color> = [];
 
-export const generateColors = (
-  definedColors: string[],
-  scales: number[],
-  functionType?: string
-) => {
-  const colors = [...definedColors];
-
-  for (let i = 0; i < colors.length; i++) {
-    if (!colors[i]) {
-      const j = colors.slice(i).findIndex(Boolean) + i; // firstNextColorIndex
-
-      colors[i] = getColor(
-        scales[i - 1],
-        colors[i - 1],
-        scales[j],
-        colors[j],
-        scales[i],
-        functionType
-      );
-    }
+  for (let i = 0; i < scales.length; i++) {
+    palette[i] = getColor(
+      scales[i - 1] || 0,
+      palette.at(-1)?.toString("hex") || startColor,
+      1300,
+      endColor,
+      scales[i],
+      functionType
+    );
   }
 
-  return colors;
+  return palette;
 };
 
 const getColor: GetColorFunction = (s1, c1, s2, c2, s, f = "linear") => {
   const color1 = hexToRgb(c1);
   const color2 = hexToRgb(c2);
   const color = color1.map((c, i) => functions[f](s1, c, s2, color2[i], s));
-  return rgbToHex(color);
+
+  console.log(s1, c1, s2, c2, s);
+  console.log(parseColor(rgbToHex(color)).toString("hex"));
+
+  return parseColor(rgbToHex(color));
 };
 
 const functions: Record<string, DistributionFunction> = {
@@ -103,7 +99,7 @@ type GetColorFunction = (
   color2hex: string,
   scale: number,
   functionType?: string
-) => string;
+) => Color;
 type DistributionFunction = (
   scale1: number,
   color1: number,
@@ -113,30 +109,30 @@ type DistributionFunction = (
 ) => number;
 
 export const getChakraUITokens = (
-  colors: string[],
+  colors: Color[],
   scales: number[]
 ): Record<string, string> =>
   colors.slice(1, colors.length - 1).reduce((acc, color, i) => {
     const scale = scales[i + 1];
     return {
       ...acc,
-      [scale]: color,
+      [scale]: color.toString("hex").toUpperCase(),
     };
   }, {});
 export const getPandaTokens = (
-  colors: string[],
+  colors: Color[],
   scales: number[]
 ): Record<string, string> =>
   colors.slice(1, colors.length - 1).reduce((acc, color, i) => {
     const scale = scales[i + 1];
     return {
       ...acc,
-      [scale]: { value: color.toUpperCase() },
+      [scale]: { value: color.toString("hex").toUpperCase() },
     };
   }, {});
 
 export const getChakraUITokensObjectString = (
-  colors: string[],
+  colors: Color[],
   scales: number[]
 ) => {
   const tokens = getChakraUITokens(colors, scales);
@@ -153,7 +149,7 @@ export const getChakraUITokensObjectString = (
 };
 
 export const getPandaCssTokensObjectString = (
-  colors: string[],
+  colors: Color[],
   scales: number[]
 ) => {
   const tokens = getPandaTokens(colors, scales);

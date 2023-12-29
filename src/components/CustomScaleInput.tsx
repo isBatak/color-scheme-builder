@@ -1,49 +1,47 @@
-import { FC } from "react";
-import { Flex, HStack, Text } from "@chakra-ui/react";
-import { Button } from "@chakra-ui/button";
-import {
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-} from "@chakra-ui/number-input";
+import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
+import * as NumberInput from "@/components/ui/number-input";
+import { atom, useAtom } from "jotai";
+import { Button } from "./ui/button";
+import { scalesAtom } from "./Palette";
 
-interface ICustomScaleInput {
-  customScaleValue: number;
-  setCustomScaleValue: Function;
-  addCustomScale: Function;
-}
+export const customScaleValueAtom = atom<number>(550);
 
-export const CustomScaleInput: FC<React.PropsWithChildren<ICustomScaleInput>> = ({
-  customScaleValue,
-  setCustomScaleValue,
-  addCustomScale,
-}) => {
+export const CustomScaleInput = () => {
+  const [scales, setScales] = useAtom(scalesAtom);
+  const [customScaleValue, setCustomScaleValue] = useAtom(customScaleValueAtom);
+
   return (
-    <Flex justifyContent="center" p="4">
-      <HStack>
-        <Text>Add new scale value:</Text>
-        <NumberInput
-          w="100px"
-          min={10}
-          max={990}
-          value={customScaleValue}
-          onChange={(valueString) => setCustomScaleValue(parseInt(valueString))}
-        >
-          <NumberInputField />
-          <NumberInputStepper>
-            <NumberIncrementStepper />
-            <NumberDecrementStepper />
-          </NumberInputStepper>
-        </NumberInput>
-        <Button
-          variant="outline"
-          onClick={() => addCustomScale(customScaleValue)}
-        >
-          Add
-        </Button>
-      </HStack>
-    </Flex>
+    <NumberInput.Root
+      min={10}
+      max={990}
+      value={customScaleValue.toString()}
+      onValueChange={(e) => setCustomScaleValue(e.valueAsNumber)}
+      width="2xs"
+    >
+      <NumberInput.Label>Add new scale value</NumberInput.Label>
+      <NumberInput.Control>
+        <NumberInput.Input />
+        <NumberInput.IncrementTrigger>
+          <ChevronUpIcon />
+        </NumberInput.IncrementTrigger>
+        <NumberInput.DecrementTrigger>
+          <ChevronDownIcon />
+        </NumberInput.DecrementTrigger>
+      </NumberInput.Control>
+      <Button
+        variant="outline"
+        onClick={() => {
+          if (scales.includes(customScaleValue)) {
+            return;
+          }
+
+          const newScale = [...scales, customScaleValue].sort();
+
+          setScales(newScale);
+        }}
+      >
+        Add
+      </Button>
+    </NumberInput.Root>
   );
 };

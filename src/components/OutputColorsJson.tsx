@@ -1,11 +1,16 @@
-import { Box, Button, Code, useToast } from "@chakra-ui/react";
-import { FC, useState } from "react";
+import { useState } from "react";
 import {
   getChakraUITokensObjectString,
   getPandaCssTokensObjectString,
-} from "../utils/color-utils";
-import { copyToClipboard } from "../utils/common-utils";
+} from "@/utils/color-utils";
 import * as Tabs from "@/components/ui/tabs";
+import { copyToClipboard } from "@/utils/common-utils";
+import { useAtom } from "jotai";
+import { paletteAtom, scalesAtom } from "./Palette";
+import { Box } from "@/styled-system/jsx";
+import { Button } from "./ui/button";
+import { Code } from "./ui/code";
+import { toast } from "src/App";
 
 const options = [
   {
@@ -18,30 +23,23 @@ const options = [
   },
 ];
 
-interface IOutputColorsJson {
-  colors: string[];
-  scales: number[];
-}
+export const OutputColorsJson = () => {
+  const [scales] = useAtom(scalesAtom);
+  const [palette] = useAtom(paletteAtom);
 
-export const OutputColorsJson: FC<
-  React.PropsWithChildren<IOutputColorsJson>
-> = ({ colors, scales }) => {
   const [selectedSystem, selectSystem] = useState<string>(() => options[0].id);
-  const toast = useToast();
   const tokenObjectString =
     selectedSystem === options[0].id
-      ? getChakraUITokensObjectString(colors, scales)
-      : getPandaCssTokensObjectString(colors, scales);
+      ? getChakraUITokensObjectString(palette, scales)
+      : getPandaCssTokensObjectString(palette, scales);
 
   const onTokenCopy = async () => {
     const isCopied = await copyToClipboard(tokenObjectString);
 
     if (isCopied) {
-      toast({
+      toast.create({
         title: "Tokens copied to clipboard!",
-        status: "info",
         duration: 1000,
-        isClosable: true,
       });
     }
   };

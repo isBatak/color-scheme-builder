@@ -3,17 +3,32 @@ import { Box, Container, HStack } from "@/styled-system/jsx";
 import { button } from "@/styled-system/recipes";
 import { GithubIcon, TwitterIcon } from "lucide-react";
 import type { PropsWithChildren } from "react";
+import { Text } from "@/components/ui/text";
 
 export interface NavbarProps {}
 
 export function Navbar(props: PropsWithChildren<NavbarProps>) {
   return (
-    <Box borderBottom="1px solid token(colors.border.default)" {...props}>
+    <Box
+      borderBottom="1px solid token(colors.border.default)"
+      pos="sticky"
+      top="0"
+      bg="bg.default"
+      zIndex="sticky"
+      {...props}
+    >
       <Container>
         <HStack justify="space-between" py="3" gap="8">
-          <a href="/" aria-label="Go to start page">
+          <Text
+            as="a"
+            textStyle="lg"
+            href="/"
+            aria-label="Go to start page"
+            fontWeight="bold"
+          >
             Color Scheme Builder
-          </a>
+          </Text>
+
           <HStack gap={{ base: "2", md: "4" }}>
             <HStack gap="0.5">
               <a

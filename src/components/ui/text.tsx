@@ -1,6 +1,6 @@
 import { styled, type HTMLStyledProps } from "styled-system/jsx";
 
-type As = "p" | "span" | "div" | "label";
+type As = "p" | "span" | "div" | "label" | "a";
 
 export type TextProps = {
   as?: As;

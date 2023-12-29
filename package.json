@@ -4,6 +4,7 @@
   "description": "",
   "keywords": [],
   "main": "src/index.tsx",
+  "license": "MIT",
   "dependencies": {
     "@ark-ui/react": "^1.2.1",
     "d3-scale": "^3.3.0",
@@ -15,6 +16,7 @@
   },
   "devDependencies": {
     "@pandacss/dev": "^0.23.0",
+    "@pandacss/studio": "^0.23.0",
     "@park-ui/panda-preset": "^0.27.0",
     "@types/d3-scale": "^3.2.3",
     "@types/react": "18.2.45",

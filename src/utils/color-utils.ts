@@ -1,26 +1,19 @@
+import { endColor, startColor } from "@/consts/defaultValues";
 import { Color, parseColor } from "@zag-js/color-utils";
 import * as d3 from "d3-scale";
 
-export const generatePalette = (
-  colors: string[],
-  scales: number[],
-  functionType?: string
-) => {
-  const palette = [];
+export const generatePalette = (scales: number[], functionType?: string) => {
+  const palette: Array<Color> = [];
 
-  for (let i = 0; i < colors.length; i++) {
-    if (!colors[i]) {
-      const nextColorIndex = colors.slice(i).findIndex(Boolean) + i;
-
-      palette[i] = getColor(
-        scales[i - 1],
-        colors[i - 1],
-        scales[i + 1],
-        colors[i + 1],
-        scales[i],
-        functionType
-      );
-    }
+  for (let i = 0; i < scales.length; i++) {
+    palette[i] = getColor(
+      scales[i - 1] || 0,
+      palette.at(-1)?.toString("hex") || startColor,
+      1300,
+      endColor,
+      scales[i],
+      functionType
+    );
   }
 
   return palette;
@@ -116,30 +109,30 @@ type DistributionFunction = (
 ) => number;
 
 export const getChakraUITokens = (
-  colors: string[],
+  colors: Color[],
   scales: number[]
 ): Record<string, string> =>
   colors.slice(1, colors.length - 1).reduce((acc, color, i) => {
     const scale = scales[i + 1];
     return {
       ...acc,
-      [scale]: color,
+      [scale]: color.toString("hex").toUpperCase(),
     };
   }, {});
 export const getPandaTokens = (
-  colors: string[],
+  colors: Color[],
   scales: number[]
 ): Record<string, string> =>
   colors.slice(1, colors.length - 1).reduce((acc, color, i) => {
     const scale = scales[i + 1];
     return {
       ...acc,
-      [scale]: { value: color.toUpperCase() },
+      [scale]: { value: color.toString("hex").toUpperCase() },
     };
   }, {});
 
 export const getChakraUITokensObjectString = (
-  colors: string[],
+  colors: Color[],
   scales: number[]
 ) => {
   const tokens = getChakraUITokens(colors, scales);
@@ -156,7 +149,7 @@ export const getChakraUITokensObjectString = (
 };
 
 export const getPandaCssTokensObjectString = (
-  colors: string[],
+  colors: Color[],
   scales: number[]
 ) => {
   const tokens = getPandaTokens(colors, scales);

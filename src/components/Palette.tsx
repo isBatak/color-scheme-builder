@@ -3,29 +3,33 @@ import { PaletteColor } from "@/components/PaletteColor";
 import { LockButton } from "@/components/LockButton";
 import { ClearButton } from "@/components/ClearButton";
 import { atom, useAtom } from "jotai";
-import { defaultColors, defaultScales } from "@/consts/defaultValues";
+import { defaultScales } from "@/consts/defaultValues";
 import { sortNumbers } from "src/utils/math-utils";
 import { generatePalette, rgbaToHex } from "src/utils/color-utils";
 import { distributionAtom } from "./Distribution";
+import { Color } from "@zag-js/color-utils";
 
-export const colorsAtom = atom(defaultColors);
 export const scalesAtom = atom(defaultScales);
 
-export const paletteAtom = atom((get) => {
-  const distribution = get(distributionAtom);
-  const colors = get(colorsAtom);
-  const scales = get(scalesAtom);
+export const paletteAtom = atom(
+  (get) => {
+    const distribution = get(distributionAtom);
+    const scales = get(scalesAtom);
 
-  console.log(colors, scales);
+    console.log(scales);
 
-  return generatePalette(colors, scales, distribution);
-});
+    return generatePalette(scales, distribution);
+  },
+  (get, set, update: Color[]) => {
+    set(paletteAtom, update);
+  }
+);
 
 export interface PaletteProps {}
 
 export function Palette() {
   const [scales] = useAtom(scalesAtom);
-  const [palette] = useAtom(paletteAtom);
+  const [palette, setPalette] = useAtom(paletteAtom);
 
   //   const removeCustomScale = (scale: number) => {
   //     if (!scales.includes(scale)) {
@@ -77,7 +81,9 @@ export function Palette() {
               value={color.toString("hex")}
               onChange={(color) => {
                 console.log(color);
-                // defineColor(scale, rgbaToHex(value));
+                const newPalette = [...palette];
+                newPalette[i] = color;
+                setPalette(newPalette);
               }}
             />
 

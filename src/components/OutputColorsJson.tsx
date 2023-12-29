@@ -6,7 +6,7 @@ import {
 import * as Tabs from "@/components/ui/tabs";
 import { copyToClipboard } from "@/utils/common-utils";
 import { useAtom } from "jotai";
-import { colorsAtom, scalesAtom } from "./Palette";
+import { paletteAtom, scalesAtom } from "./Palette";
 import { Box } from "@/styled-system/jsx";
 import { Button } from "./ui/button";
 import { Code } from "./ui/code";
@@ -25,13 +25,13 @@ const options = [
 
 export const OutputColorsJson = () => {
   const [scales] = useAtom(scalesAtom);
-  const [colors] = useAtom(colorsAtom);
+  const [palette] = useAtom(paletteAtom);
 
   const [selectedSystem, selectSystem] = useState<string>(() => options[0].id);
   const tokenObjectString =
     selectedSystem === options[0].id
-      ? getChakraUITokensObjectString(colors, scales)
-      : getPandaCssTokensObjectString(colors, scales);
+      ? getChakraUITokensObjectString(palette, scales)
+      : getPandaCssTokensObjectString(palette, scales);
 
   const onTokenCopy = async () => {
     const isCopied = await copyToClipboard(tokenObjectString);

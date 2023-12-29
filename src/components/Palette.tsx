@@ -1,18 +1,15 @@
 import { Flex, Box } from "@/styled-system/jsx";
-import { Color } from "@/components/Color";
+import { PaletteColor } from "@/components/PaletteColor";
 import { LockButton } from "@/components/LockButton";
 import { ClearButton } from "@/components/ClearButton";
 import { atom, useAtom } from "jotai";
 import { defaultColors, defaultScales } from "@/consts/defaultValues";
 import { sortNumbers } from "src/utils/math-utils";
-import { generateColors, rgbaToHex } from "src/utils/color-utils";
+import { generatePalette, rgbaToHex } from "src/utils/color-utils";
 import { distributionAtom } from "./Distribution";
 
 export const colorsAtom = atom(defaultColors);
 export const scalesAtom = atom(defaultScales);
-// export const defaultColorsAtom = atom(defaultColors);
-// export const customScaleValuesAtom = atom<number[]>([]);
-// export const customScaleValueAtom = atom<number>(550);
 
 export const paletteAtom = atom((get) => {
   const distribution = get(distributionAtom);
@@ -21,7 +18,7 @@ export const paletteAtom = atom((get) => {
 
   console.log(colors, scales);
 
-  return generateColors(colors, scales, distribution);
+  return generatePalette(colors, scales, distribution);
 });
 
 export interface PaletteProps {}
@@ -75,10 +72,11 @@ export function Palette() {
               disabled={!isCustom}
             /> */}
 
-            <Color
+            <PaletteColor
               name={scales[i].toString()}
-              value={color}
-              onChange={(value) => {
+              value={color.toString("hex")}
+              onChange={(color) => {
+                console.log(color);
                 // defineColor(scale, rgbaToHex(value));
               }}
             />

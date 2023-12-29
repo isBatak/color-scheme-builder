@@ -1492,7 +1492,7 @@
     "@zag-js/utils" "0.31.1"
     "@zag-js/visually-hidden" "0.31.1"
 
-"@zag-js/color-utils@0.31.1":
+"@zag-js/color-utils@0.31.1", "@zag-js/color-utils@^0.31.1":
   version "0.31.1"
   resolved "https://registry.yarnpkg.com/@zag-js/color-utils/-/color-utils-0.31.1.tgz#2c6bd95e45cd3fcdf6f0be515c2648bbf5d56b1b"
   integrity sha512-vKvPgmQ57EWN4cwviObHk1G9MDfdrkCpmzTB293l05GnwFdBFxw3q8rO4F3FfhzZijn6NoXGhiPKd8+T4FrZrg==

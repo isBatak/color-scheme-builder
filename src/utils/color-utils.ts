@@ -1,28 +1,29 @@
+import { Color, parseColor } from "@zag-js/color-utils";
 import * as d3 from "d3-scale";
 
-export const generateColors = (
-  definedColors: string[],
+export const generatePalette = (
+  colors: string[],
   scales: number[],
   functionType?: string
 ) => {
-  const colors = [...definedColors];
+  const palette = [];
 
   for (let i = 0; i < colors.length; i++) {
     if (!colors[i]) {
-      const j = colors.slice(i).findIndex(Boolean) + i; // firstNextColorIndex
+      const nextColorIndex = colors.slice(i).findIndex(Boolean) + i;
 
-      colors[i] = getColor(
+      palette[i] = getColor(
         scales[i - 1],
         colors[i - 1],
-        scales[j],
-        colors[j],
+        scales[i + 1],
+        colors[i + 1],
         scales[i],
         functionType
       );
     }
   }
 
-  return colors;
+  return palette;
 };
 
 const getColor: GetColorFunction = (s1, c1, s2, c2, s, f = "linear") => {
@@ -30,7 +31,10 @@ const getColor: GetColorFunction = (s1, c1, s2, c2, s, f = "linear") => {
   const color2 = hexToRgb(c2);
   const color = color1.map((c, i) => functions[f](s1, c, s2, color2[i], s));
 
-  return rgbToHex(color);
+  console.log(s1, c1, s2, c2, s);
+  console.log(parseColor(rgbToHex(color)).toString("hex"));
+
+  return parseColor(rgbToHex(color));
 };
 
 const functions: Record<string, DistributionFunction> = {
@@ -102,7 +106,7 @@ type GetColorFunction = (
   color2hex: string,
   scale: number,
   functionType?: string
-) => string;
+) => Color;
 type DistributionFunction = (
   scale1: number,
   color1: number,

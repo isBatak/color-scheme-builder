@@ -7,16 +7,18 @@ import { Text } from "@/components/ui/text";
 import { Badge } from "@/components/ui/badge";
 import { ratio, score } from "wcag-color";
 import { rgbaToHex, rgbaToRgb } from "src/utils/color-utils";
+import { type Color } from "@zag-js/color-utils";
 
 const ColorButton = (props: any) => {
   return (
     <styled.button
-      w="200px"
-      h="100px"
+      w="400px"
       pos="relative"
       p="2"
       display="flex"
-      flexDir="column"
+      flexDir="row"
+      justifyContent="flex-end"
+      alignItems="center"
       gap="1"
       {...props}
     ></styled.button>
@@ -36,8 +38,7 @@ const WcagBadge = ({ foreground, background }: WcagBadgeProps) => {
         h="3"
         borderRadius="full"
         bg={background}
-        border="1px solid!"
-        borderColor="gray.5!"
+        border="1px solid token(colors.border.default)"
       />
       {ratio(foreground, background)} {score(foreground, background)}
     </Badge>
@@ -47,23 +48,31 @@ const WcagBadge = ({ foreground, background }: WcagBadgeProps) => {
 interface ColorProps {
   name: string;
   value: string;
-  onChange: (value: string) => void;
+  onChange: (value: Color) => void;
 }
 
-export const Color = ({ value, onChange, name }: ColorProps) => {
+export const PaletteColor = ({ value, onChange, name }: ColorProps) => {
   return (
     <ColorPicker.Root
       value={value}
       onValueChange={(details) => {
-        onChange(details.valueAsString);
+        onChange(details.value);
       }}
     >
       {(api) => (
         <>
           <ColorPicker.Control>
-            {/* <ColorPicker.ChannelInput channel="hex" asChild>
-              <Input />
-            </ColorPicker.ChannelInput> */}
+            <Flex direction="column" w="50px">
+              <Text textStyle="md" fontWeight="bold">
+                {name}
+              </Text>
+              {/* <Text textStyle="xs" color="gray.9">
+                {rgbaToHex(api.valueAsString)}
+              </Text>
+              <Text textStyle="xs" color="gray.9">
+                {rgbaToRgb(api.valueAsString)}
+              </Text> */}
+            </Flex>
 
             <ColorPicker.Trigger asChild>
               <ColorButton>
@@ -85,18 +94,6 @@ export const Color = ({ value, onChange, name }: ColorProps) => {
                 </Box>
               </ColorButton>
             </ColorPicker.Trigger>
-
-            <Flex direction="column" minW="150px">
-              <Text textStyle="md" fontWeight="bold">
-                {name}
-              </Text>
-              <Text textStyle="xs" color="gray.9">
-                {rgbaToHex(api.valueAsString)}
-              </Text>
-              <Text textStyle="xs" color="gray.9">
-                {rgbaToRgb(api.valueAsString)}
-              </Text>
-            </Flex>
           </ColorPicker.Control>
           <ColorPicker.Positioner>
             <ColorPicker.Content>

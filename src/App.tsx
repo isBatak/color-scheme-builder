@@ -20,6 +20,9 @@ import {
 import { sortNumbers } from "./utils/math-utils";
 import { LockButton } from "./components/LockButton";
 import { Color } from "./components/Color";
+import { Box } from "@/styled-system/jsx";
+import { SectionContainer } from "./components/shared/SectionContainer";
+import { css } from "@/styled-system/css";
 
 export const App = () => {
   const [colors, setColors] = useState(defaultColors);
@@ -92,47 +95,55 @@ export const App = () => {
 
   return (
     <div className="App">
-      <Flex py="4">
-        <Container>
-          <VStack w="full" alignItems="flex-start">
-            <HStack w="full">
-              <Text minW="200px">Distribution function:</Text>
-              <Select
-                value={selectedFunction}
-                onChange={(e) => selectFunction(e.target.value)}
-              >
-                {distributionFunctionTypes.map((type) => (
-                  <option key={type} value={type}>
-                    {type}
-                  </option>
-                ))}
-              </Select>
-            </HStack>
-          </VStack>
-        </Container>
-      </Flex>
+      <SectionContainer>
+        <VStack w="full" alignItems="flex-start" mb={{ base: 4, md: 10 }}>
+          <HStack w="full">
+            <Text minW="200px"> Distribution function:</Text>
+            <Select
+              value={selectedFunction}
+              onChange={(e) => selectFunction(e.target.value)}
+            >
+              {distributionFunctionTypes.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </Select>
+          </HStack>
+        </VStack>
 
-      <Container>
-        <VStack spacing={4} p="4">
-          {scales.map((scale, i) => {
-            if (i === 0 || i === scales.length - 1) return null;
+        <Flex flexDirection={{ base: "column", lg: "row" }}>
+          <VStack spacing={2} p="4" flex="1" maxW="750px">
+            {scales.map((scale, i) => {
+              if (i === 0 || i === scales.length - 1) return null;
 
-            const isCustom = customScaleValues.includes(scale);
-            const isDefined = Boolean(definedColors[i]);
+              const isCustom = customScaleValues.includes(scale);
 
-            return (
-              <Flex
-                key={scale}
-                alignItems="center"
-                bg={isDefined ? "gray.100" : undefined}
-              >
-                <ClearButton
-                  label="Clear custom scale value"
-                  onClick={() => removeCustomScale(scale)}
-                  disabled={!isCustom}
-                />
+              const isDefined = Boolean(definedColors[i]);
 
-                {/* <Text
+              const index = scales.indexOf(scale);
+              const isLocked = Boolean(definedColors[index] === "");
+
+              console.log("scale:", scale + " - " + isLocked);
+
+              return (
+                <Flex
+                  key={scale}
+                  alignItems="center"
+                  className={css({
+                    p: 4,
+                    borderRadius: "md",
+                    bg: "gray.100",
+                    _osDark: { bg: "gray.200" },
+                  })}
+                >
+                  <ClearButton
+                    label="Clear custom scale value"
+                    onClick={() => removeCustomScale(scale)}
+                    disabled={!isCustom}
+                  />
+
+                  {/* <Text
                   w="80px"
                   textAlign="center"
                   textDecoration={isCustom ? "underline" : undefined}
@@ -141,29 +152,17 @@ export const App = () => {
                   {scale}
                 </Text> */}
 
-                {/* <Text>{colors[i]}</Text> */}
+                  {/* <Text>{colors[i]}</Text> */}
 
-                {/* <Input
-                  type="text"
-                  w="160px"
-                  value={colors[i]}
-                  fontWeight={isDefined ? "bold" : "normal"}
-                  onChange={(e) => {
-                    const { value } = e.target;
-                    if (value.length === 7 && value.startsWith("#")) {
-                      defineColor(scale, e.target.value);
-                    }
-                  }}
-                /> */}
-                <Color
-                  name={scale.toString()}
-                  value={colors[i]}
-                  onChange={(value) => {
-                    defineColor(scale, rgbaToHex(value));
-                  }}
-                />
+                  <Color
+                    name={scale.toString()}
+                    value={colors[i]}
+                    onChange={(value) => {
+                      defineColor(scale, rgbaToHex(value));
+                    }}
+                  />
 
-                {/* <Input
+                  {/* <Input
                   type="color"
                   border="none"
                   shadow="md"
@@ -185,13 +184,16 @@ export const App = () => {
             );
           })}
 
-          <CustomScaleInput
-            {...{ addCustomScale, customScaleValue, setCustomScaleValue }}
-          />
+            <CustomScaleInput
+              {...{ addCustomScale, customScaleValue, setCustomScaleValue }}
+            />
+          </VStack>
 
-          <OutputColorsJson {...{ colors, scales }} />
-        </VStack>
-      </Container>
+          <Box flex="1" maxW="500px">
+            <OutputColorsJson {...{ colors, scales }} />
+          </Box>
+        </Flex>
+      </SectionContainer>
     </div>
   );
 };

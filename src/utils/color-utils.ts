@@ -87,6 +87,8 @@ export const rgbaToRgb = (rgba: string) => {
 };
 
 export const rgbaToHex = (rgba: string) => {
+  if (!rgba.includes("rgba")) return rgba;
+
   const [r, g, b, a] = rgba
     .replace("rgba(", "")
     .replace(")", "")

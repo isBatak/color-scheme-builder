@@ -1,12 +1,15 @@
-import { PipetteIcon } from "lucide-react";
-import { Box, Flex, HStack, Stack, styled } from "styled-system/jsx";
+import { Badge } from "@/components/ui/badge";
 import * as ColorPicker from "@/components/ui/color-picker";
 import { IconButton } from "@/components/ui/icon-button";
 import { Input } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
-import { Badge } from "@/components/ui/badge";
-import { ratio, score } from "wcag-color";
+import { parseColor } from "@zag-js/color-utils";
+import { PipetteIcon } from "lucide-react";
+import { useEffect, useState } from "react";
 import { rgbaToHex, rgbaToRgb } from "src/utils/color-utils";
+import { useDebounce } from "src/utils/useDebounce";
+import { Box, Flex, HStack, Stack, styled } from "styled-system/jsx";
+import { ratio, score } from "wcag-color";
 
 const ColorButton = (props: any) => {
   return (
@@ -54,6 +57,21 @@ interface ColorProps {
 }
 
 export const Color = ({ value, onChange, name }: ColorProps) => {
+  const [hexValue, setHexValue] = useState(rgbaToHex(value));
+
+  useEffect(() => {
+    setHexValue(rgbaToHex(value));
+  }, [value]);
+
+  const handleHexChange = useDebounce((newValue) => {
+    try {
+      const parsedColor = parseColor(newValue);
+      onChange(parsedColor.toString("hex"));
+    } catch (error) {
+      console.error("Invalid color value:", error);
+    }
+  }, 300);
+
   return (
     <ColorPicker.Root
       value={value}
@@ -61,95 +79,104 @@ export const Color = ({ value, onChange, name }: ColorProps) => {
         onChange(details.valueAsString);
       }}
     >
-      {(api) => (
-        <>
-          <ColorPicker.Control>
-            {/* <ColorPicker.ChannelInput channel="hex" asChild>
+      {(api) => {
+        return (
+          <>
+            <ColorPicker.Control>
+              {/* <ColorPicker.ChannelInput channel="hex" asChild>
               <Input />
             </ColorPicker.ChannelInput> */}
 
-            <ColorPicker.Trigger asChild>
-              <ColorButton>
-                <WcagBadge
-                  foreground={rgbaToHex(api.valueAsString)}
-                  background="#ffffff"
+              <ColorPicker.Trigger asChild>
+                <ColorButton>
+                  <WcagBadge
+                    foreground={rgbaToHex(api.valueAsString)}
+                    background="#ffffff"
+                  />
+                  <WcagBadge
+                    foreground={rgbaToHex(api.valueAsString)}
+                    background="#000000"
+                  />
+                  <Box pos="absolute" inset={0} zIndex={0}>
+                    <ColorPicker.Swatch value={api.value} w="100%" h="100%" />
+                  </Box>
+                </ColorButton>
+              </ColorPicker.Trigger>
+              <Flex direction="column" minW="150px" gap={2}>
+                <Text textStyle="md" fontWeight="bold">
+                  {name}
+                </Text>
+                <Input
+                  size="xs"
+                  color="gray.9"
+                  value={hexValue}
+                  onChange={(e) => {
+                    setHexValue(e.target.value);
+                    handleHexChange(e.target.value);
+                  }}
                 />
-                <WcagBadge
-                  foreground={rgbaToHex(api.valueAsString)}
-                  background="#000000"
-                />
-                <Box pos="absolute" inset={0} zIndex={0}>
-                  <ColorPicker.Swatch value={api.value} w="100%" h="100%" />
-                </Box>
-              </ColorButton>
-            </ColorPicker.Trigger>
+                <Text textStyle="md" fontWeight="bold">
+                  {api.valueAsString}
+                </Text>
+              </Flex>
+            </ColorPicker.Control>
+            <ColorPicker.Positioner>
+              <ColorPicker.Content>
+                <Stack gap="2">
+                  <ColorPicker.Area>
+                    <ColorPicker.AreaBackground />
+                    <ColorPicker.AreaThumb />
+                  </ColorPicker.Area>
 
-            <Flex direction="column" minW="150px">
-              <Text textStyle="md" fontWeight="bold">
-                {name}
-              </Text>
-              <Text textStyle="xs" color="gray.9">
-                {rgbaToHex(api.valueAsString)}
-              </Text>
-              <Text textStyle="xs" color="gray.9">
-                {rgbaToRgb(api.valueAsString)}
-              </Text>
-            </Flex>
-          </ColorPicker.Control>
-          <ColorPicker.Positioner>
-            <ColorPicker.Content>
-              <Stack gap="3">
-                <ColorPicker.Area>
-                  <ColorPicker.AreaBackground />
-                  <ColorPicker.AreaThumb />
-                </ColorPicker.Area>
-                <HStack gap="3">
-                  <ColorPicker.EyeDropperTrigger asChild>
-                    <IconButton
-                      size="xs"
-                      variant="outline"
-                      aria-label="Pick a color"
-                    >
-                      <PipetteIcon />
-                    </IconButton>
-                  </ColorPicker.EyeDropperTrigger>
-                  <Stack gap="2" flex="1">
-                    <ColorPicker.ChannelSlider channel="hue">
-                      <ColorPicker.ChannelSliderTrack />
-                      <ColorPicker.ChannelSliderThumb />
-                    </ColorPicker.ChannelSlider>
-                    {/* <ColorPicker.ChannelSlider channel="alpha">
+                  <HStack gap="1">
+                    <ColorPicker.EyeDropperTrigger asChild>
+                      <IconButton
+                        size="xs"
+                        variant="outline"
+                        aria-label="Pick a color"
+                      >
+                        <PipetteIcon />
+                      </IconButton>
+                    </ColorPicker.EyeDropperTrigger>
+                    <Stack gap="2" flex="1">
+                      <ColorPicker.ChannelSlider channel="hue">
+                        <ColorPicker.ChannelSliderTrack />
+                        <ColorPicker.ChannelSliderThumb />
+                      </ColorPicker.ChannelSlider>
+                      {/* <ColorPicker.ChannelSlider channel="alpha">
                       <ColorPicker.TransparencyGrid size="8px" />
                       <ColorPicker.ChannelSliderTrack />
                       <ColorPicker.ChannelSliderThumb />
                     </ColorPicker.ChannelSlider> */}
-                  </Stack>
-                </HStack>
-                <HStack>
-                  <ColorPicker.ChannelInput channel="hex" asChild>
-                    <Input size="2xs" />
-                  </ColorPicker.ChannelInput>
-                  {/* <ColorPicker.ChannelInput channel="alpha" asChild>
+                    </Stack>
+                  </HStack>
+
+                  <HStack>
+                    <ColorPicker.ChannelInput channel="hex" asChild>
+                      <Input size="2xs" />
+                    </ColorPicker.ChannelInput>
+                    {/* <ColorPicker.ChannelInput channel="alpha" asChild>
                     <Input size="2xs" />
                   </ColorPicker.ChannelInput> */}
-                </HStack>
-                <Stack gap="1.5">
-                  <Text textStyle="xs" fontWeight="medium" color="fg.default">
-                    Saved Colors
-                  </Text>
-                  <ColorPicker.SwatchGroup>
-                    {presets.map((color, id) => (
-                      <ColorPicker.SwatchTrigger key={id} value={color}>
-                        <ColorPicker.Swatch value={color} />
-                      </ColorPicker.SwatchTrigger>
-                    ))}
-                  </ColorPicker.SwatchGroup>
+                  </HStack>
+                  <Stack gap="1.5">
+                    <Text textStyle="xs" fontWeight="medium" color="fg.default">
+                      Saved Colors
+                    </Text>
+                    <ColorPicker.SwatchGroup>
+                      {presets.map((color, id) => (
+                        <ColorPicker.SwatchTrigger key={id} value={color}>
+                          <ColorPicker.Swatch value={color} />
+                        </ColorPicker.SwatchTrigger>
+                      ))}
+                    </ColorPicker.SwatchGroup>
+                  </Stack>
                 </Stack>
-              </Stack>
-            </ColorPicker.Content>
-          </ColorPicker.Positioner>
-        </>
-      )}
+              </ColorPicker.Content>
+            </ColorPicker.Positioner>
+          </>
+        );
+      }}
     </ColorPicker.Root>
   );
 };
